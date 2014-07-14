@@ -5,7 +5,7 @@ MAINTAINER maintain@geneegroup.com
 ADD sources.list /etc/apt/sources.list
 
 # Install Basic Packages
-RUN apt-get update && apt-get install -y language-pack-en bash-completion
+RUN apt-get update && apt-get install -y language-pack-en language-pack-zh-hans bash-completion
 
 # Install Supervisor
 RUN apt-get install -y supervisor && \
