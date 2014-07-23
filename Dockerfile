@@ -1,9 +1,6 @@
 FROM ubuntu:14.04
 MAINTAINER maintain@geneegroup.com
 
-# Use faster APT mirror
-ADD sources.list /etc/apt/sources.list
-
 # Install Basic Packages
 RUN apt-get update && apt-get install -y language-pack-en language-pack-zh-hans bash-completion
 
