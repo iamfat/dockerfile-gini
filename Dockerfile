@@ -49,7 +49,7 @@ ENV COMPOSER_HOME /usr/local/share/composer
 # Install Gini
 RUN composer global require 'iamfat/gini:dev-master'
 
-VOLUME ["/data", "/etc/nginx/sites-enabled", "/var/log/nginx"]
+VOLUME ["/data", "/var/log/supervisor", "/etc/nginx/sites-enabled", "/var/log/nginx"]
 
 EXPOSE 9000
 EXPOSE 80
