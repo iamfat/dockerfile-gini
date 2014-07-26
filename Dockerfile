@@ -11,11 +11,11 @@ RUN apt-get install -y supervisor && \
 
 # Install PHP 5.5
 RUN apt-get install -y php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl libyaml-0-2 && \
-    chmod -R a+w /var/lib/php5 && \
     sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php5/fpm/pool.d/www.conf && \
     sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php5/fpm/php-fpm.conf && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/fpm/php.ini && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini && \
+    chmod a+wt,go-r /var/lib/php5
 ADD supervisor.php5-fpm.conf /etc/supervisor/conf.d/php5-fpm.conf
 
 ADD yaml.so /usr/lib/php5/20121212/yaml.so
