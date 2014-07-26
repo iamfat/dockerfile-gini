@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y language-pack-en language-pack-zh-hans 
 
 # Install Supervisor
 RUN apt-get install -y supervisor && \
-    sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf
+    sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf && \
+    sed -i 's/^logfile=.*$/logfile=\/dev\/null/' /etc/supervisor/supervisord.conf
 
 # Install PHP 5.5
 RUN apt-get install -y php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl libyaml-0-2 && \
