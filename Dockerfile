@@ -58,5 +58,4 @@ RUN chmod a+wt,go-r /var/lib/php5
 EXPOSE 9000
 EXPOSE 80
 
-ENTRYPOINT ["/usr/bin/supervisord"]
-CMD ["-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
