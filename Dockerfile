@@ -47,6 +47,9 @@ ENV COMPOSER_HOME /usr/local/share/composer
 # Install Gini
 RUN composer global require 'iamfat/gini:dev-master'
 
+# Install GetText
+RUN apt-get install -y gettext
+
 # Make sure /var/lib/php5 accessible for php5-fpm
 RUN chmod a+wt,go-r /var/lib/php5
 
