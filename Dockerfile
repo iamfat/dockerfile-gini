@@ -50,9 +50,6 @@ RUN composer global require 'iamfat/gini:dev-master'
 # Install GetText
 RUN apt-get install -y gettext
 
-# Make sure /var/lib/php5 accessible for php5-fpm
-RUN chmod a+wt,go-r /var/lib/php5
-
 # VOLUME ["/data", "/var/log/supervisor", "/etc/nginx/sites-enabled", "/var/log/nginx"]
 
 EXPOSE 9000
