@@ -1,13 +1,11 @@
 Docker Hub: iamfat/gini
 ===========
 
-## Gini Environment (Gini + Composer + PHP5.5 + Nginx + SSH)
+## Gini Environment (Gini + Composer + PHP5.5)
 ```bash
 docker build -t iamfat/gini gini
-docker run --name gini -v /dev/log:/dev/log -v /data:/data --privileged \
-    -v /data/logs/supervisor:/var/log/supervisor \
-    -v /data/config/sites:/etc/nginx/sites-enabled \
-    -v /data/logs/nginx:/var/log/nginx \
-    -p 80:80 \
+docker run --name gini --privileged \
+    -v /dev/log:/dev/log -v /data:/data \
+    --link mysql:mysql --link redis:redis \
     -d iamfat/gini
 ```

@@ -2,12 +2,10 @@ FROM ubuntu:14.04
 MAINTAINER maintain@geneegroup.com
 
 # Install Basic Packages
-RUN apt-get update && apt-get install -y language-pack-en language-pack-zh-hans bash-completion
+RUN apt-get update && apt-get install -y bash-completion
 
-# Install Supervisor
-RUN apt-get install -y supervisor && \
-    sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf && \
-    sed -i 's/^logfile=.*$/logfile=\/dev\/null/' /etc/supervisor/supervisord.conf
+# Install GetText
+RUN apt-get install -y language-pack-en language-pack-zh-hans gettext
 
 # Install PHP 5.5
 RUN apt-get install -y php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl libyaml-0-2 && \
@@ -16,8 +14,6 @@ RUN apt-get install -y php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mysq
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/fpm/php.ini && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini
     
-ADD supervisor.php5-fpm.conf /etc/supervisor/conf.d/php5-fpm.conf
-
 ADD yaml.so /usr/lib/php5/20121212/yaml.so
 RUN echo "extension=yaml.so" > /etc/php5/mods-available/yaml.ini && \
     php5enmod yaml
@@ -27,11 +23,6 @@ RUN apt-get install -y npm && \
     ln -s /usr/bin/nodejs /usr/bin/node && \
     npm install -g cnpm --registry=http://r.cnpmjs.org && \
     cnpm install -g less uglify-js
-
-# Install Nginx
-RUN apt-get install -y nginx-light && \
-    echo 'daemon off;' >> /etc/nginx/nginx.conf
-ADD supervisor.nginx.conf /etc/supervisor/conf.d/nginx.conf
 
 # Install Development Tools
 RUN apt-get install -y git
@@ -47,12 +38,7 @@ ENV COMPOSER_HOME /usr/local/share/composer
 # Install Gini
 RUN composer global require 'iamfat/gini:dev-master'
 
-# Install GetText
-RUN apt-get install -y gettext
-
-# VOLUME ["/data", "/var/log/supervisor", "/etc/nginx/sites-enabled", "/var/log/nginx"]
-
 EXPOSE 9000
 EXPOSE 80
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/sbin/php5-fpm", "--nodaemonize", "--fpm-config", "/etc/php5/fpm/php-fpm.conf"]
