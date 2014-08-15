@@ -1,11 +1,10 @@
 FROM ubuntu:14.04
 MAINTAINER maintain@geneegroup.com
 
-# Install Basic Packages
-RUN apt-get update && apt-get install -y bash-completion
+ENV DEBIAN_FRONTEND noninteractive
 
 # Install GetText
-RUN apt-get install -y language-pack-en language-pack-zh-hans gettext
+RUN apt-get update && apt-get install -y language-pack-en language-pack-zh-hans gettext
 
 # Install PHP 5.5
 RUN apt-get install -y php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl libyaml-0-2 && \
