@@ -35,7 +35,7 @@ ENV COMPOSER_PROCESS_TIMEOUT 40000
 ENV COMPOSER_HOME /usr/local/share/composer
 
 # Install Gini
-RUN composer global require 'iamfat/gini:dev-master'
+RUN composer global require -q 'iamfat/gini:dev-master'
 
 EXPOSE 9000
 
