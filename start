@@ -1,0 +1,5 @@
+#!/bin/sh
+
+chmod a+wt,go-r /var/lib/php5
+
+/usr/sbin/php5-fpm --nodaemonize --fpm-config /etc/php5/fpm/php-fpm.conf
