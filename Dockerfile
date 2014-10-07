@@ -44,6 +44,10 @@ RUN \
     locale-gen && \
     /usr/sbin/update-locale LANG="en_US.UTF-8" LANGUAGE="en_US:en"
 
+# Install msmtp-mta
+RUN apt-get install -y msmtp-mta
+ADD msmtprc /etc/msmtprc
+
 EXPOSE 9000
 
 ADD start /start
