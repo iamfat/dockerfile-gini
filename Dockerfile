@@ -15,10 +15,17 @@ RUN echo "deb http://packages.dotdeb.org wheezy-php55 all" > /etc/apt/sources.li
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/fpm/php.ini && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini
 
-ADD yaml.so /usr/lib/php5/20121212/yaml.so
-RUN echo "extension=yaml.so" > /etc/php5/mods-available/yaml.ini && \
+RUN curl -sLo /usr/lib/php5/20121212/yaml.so http://d.genee.cn/packages/yaml.so && \
+    echo "extension=yaml.so" > /etc/php5/mods-available/yaml.ini && \
     php5enmod yaml
-	
+
+# Install Friso
+RUN curl -sLo /usr/lib/libfriso.so http://d.genee.cn/packages/libfriso.so && \
+    curl -sLo /usr/lib/php5/20121212/friso.so http://d.genee.cn/packages/friso.so && \
+    curl -sL http://d.genee.cn/packages/friso-etc.tgz | tar -zxf - -C /etc && \
+    printf "extension=friso.so\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php5/mods-available/friso.ini && \
+    php5enmod friso
+
 # Install NodeJS
 RUN (curl -sL https://deb.nodesource.com/setup | bash -) && \
     apt-get install -y nodejs && npm install -g less uglify-js
