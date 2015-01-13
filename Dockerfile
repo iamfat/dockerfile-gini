@@ -27,7 +27,7 @@ RUN curl -sLo /usr/lib/libfriso.so http://d.genee.cn/packages/libfriso.so && \
     php5enmod friso
 
 # Install ZeroMQ
-RUN curl -sLo /usr/local/lib/libzmq.so.4.0.0 http://d.genee.cn/packages/zeromq/libzmq.so.4.0.0 && \
+RUN curl -sLo /usr/local/lib/libzmq.so.4.0.0 http://d.genee.cn/packages/zeromq-4/libzmq.so.4.0.0 && \
     curl -sLo /usr/lib/php5/20121212/zmq.so http://d.genee.cn/packages/zmq.so && \
     printf "extension=zmq.so\n" > /etc/php5/mods-available/zmq.ini && \
     ldconfig && php5enmod zmq
