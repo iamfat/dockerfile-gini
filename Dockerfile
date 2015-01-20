@@ -34,7 +34,7 @@ RUN curl -sLo /usr/local/lib/libzmq.so.4.0.0 http://d.genee.cn/packages/zeromq-4
 
 # Install NodeJS
 RUN (curl -sL https://deb.nodesource.com/setup | bash -) && \
-    apt-get install -y nodejs && npm install -g less uglify-js
+    apt-get install -y nodejs && npm install -g less less-plugin-clean-css uglify-js
 
 # Install Development Tools
 RUN apt-get install -y git
