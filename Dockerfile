@@ -38,7 +38,7 @@ RUN apt-get install -yq libzmq3 && \
     ldconfig && php5enmod zmq
 
 # Install NodeJS
-RUN apt-get install -yq npm && npm install -g less less-plugin-clean-css uglify-js
+RUN apt-get install -yq npm && ln -sf /usr/bin/nodejs /usr/bin/node && npm install -g less less-plugin-clean-css uglify-js
 
 # Install Development Tools
 RUN apt-get install -yq git
