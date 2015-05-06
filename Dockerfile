@@ -20,20 +20,20 @@ RUN apt-get install -yq php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mys
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/fpm/php.ini && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini
 
-RUN curl -sLo /usr/lib/php5/20131226/yaml.so http://7xispw.com1.z0.glb.clouddn.com/php-20131226/yaml.so && \
+RUN curl -sLo /usr/lib/php5/20131226/yaml.so http://files.docker.genee.in/php-20131226/yaml.so && \
     echo "extension=yaml.so" > /etc/php5/mods-available/yaml.ini && \
     php5enmod yaml
 
 # Install Friso
-RUN curl -sLo /usr/lib/libfriso.so http://7xispw.com1.z0.glb.clouddn.com/php-20131226/libfriso.so && \
-    curl -sLo /usr/lib/php5/20131226/friso.so http://7xispw.com1.z0.glb.clouddn.com/php-20131226/friso.so && \
-    curl -sL http://7xispw.com1.z0.glb.clouddn.com/friso-etc.tgz | tar -zxf - -C /etc && \
+RUN curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php-20131226/libfriso.so && \
+    curl -sLo /usr/lib/php5/20131226/friso.so http://files.docker.genee.in/php-20131226/friso.so && \
+    curl -sL http://files.docker.genee.in/friso-etc.tgz | tar -zxf - -C /etc && \
     printf "extension=friso.so\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php5/mods-available/friso.ini && \
     php5enmod friso
 
 # Install ZeroMQ
 RUN apt-get install -yq libzmq3 && \
-    curl -sLo /usr/lib/php5/20131226/zmq.so http://7xispw.com1.z0.glb.clouddn.com/php-20131226/zmq.so && \
+    curl -sLo /usr/lib/php5/20131226/zmq.so http://files.docker.genee.in/php-20131226/zmq.so && \
     printf "extension=zmq.so\n" > /etc/php5/mods-available/zmq.ini && \
     ldconfig && php5enmod zmq
 
