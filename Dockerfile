@@ -58,6 +58,8 @@ RUN composer global require -q 'iamfat/gini:dev-master'
 RUN apt-get install -yq msmtp-mta
 ADD msmtprc /etc/msmtprc
 
+RUN apt-get -y autoremove && apt-get -y autoclean && apt-get -y clean
+
 EXPOSE 9000
 
 ADD start /start
