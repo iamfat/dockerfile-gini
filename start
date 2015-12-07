@@ -1,5 +1,6 @@
 #!/bin/sh
 
+mkdir -p /run/php
 chmod a+wt,go-r /var/lib/php
 
 /usr/sbin/php-fpm7.0 --nodaemonize --fpm-config /etc/php/7.0/fpm/php-fpm.conf
