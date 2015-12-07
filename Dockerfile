@@ -19,7 +19,7 @@ RUN apt-get install -yq locales gettext && \
     /usr/sbin/update-locale LANG="en_US.UTF-8" LANGUAGE="en_US:en"
 
 # Install PHP
-RUN apt-get install -yq php7.0-fpm php7.0-cli php7.0-intl php7.0-gd php7.0-sqlite php7.0-curl php7.0-ldap && \
+RUN apt-get install -yq php7.0-fpm php7.0-cli php7.0-intl php7.0-gd php7.0-sqlite php7.0-curl php7.0-ldap php7.0-json && \
     sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/7.0/fpm/pool.d/www.conf && \
     sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php/7.0/fpm/php-fpm.conf && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/fpm/php.ini && \
