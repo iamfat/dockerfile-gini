@@ -1,10 +1,15 @@
 FROM debian:8
-MAINTAINER maintain@geneegroup.com
+MAINTAINER iamfat@gmail.com
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install cURL
 RUN apt-get -q update && apt-get install -yq curl
+
+# Add DotDeb Source
+RUN echo "deb http://packages.dotdeb.org jessie all">/etc/apt/sources.list.d/dotdeb.list && \
+    curl -sLo /tmp/dotdeb.gpg https://www.dotdeb.org/dotdeb.gpg && \
+    apt-key add /tmp/dotdeb.gpg && rm /tmp/dotdeb.gpg && apt-get update
 
 # Install Locales
 RUN apt-get install -yq locales gettext && \
@@ -14,28 +19,33 @@ RUN apt-get install -yq locales gettext && \
     /usr/sbin/update-locale LANG="en_US.UTF-8" LANGUAGE="en_US:en"
 
 # Install PHP
-RUN apt-get install -yq php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl php5-ldap libyaml-0-2 && \
-    sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php5/fpm/pool.d/www.conf && \
-    sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php5/fpm/php-fpm.conf && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/fpm/php.ini && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini
+RUN apt-get install -yq php7.0-fpm php7.0-cli php7.0-intl php7.0-gd php7.0-sqlite php7.0-curl php7.0-ldap && \
+    sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/7.0/fpm/pool.d/www.conf && \
+    sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php/7.0/fpm/php-fpm.conf && \
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/fpm/php.ini && \
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/cli/php.ini
 
-RUN curl -sLo /usr/lib/php5/20131226/yaml.so http://files.docker.genee.in/php-20131226/yaml.so && \
-    echo "extension=yaml.so" > /etc/php5/mods-available/yaml.ini && \
-    php5enmod yaml
-
-# Install Friso
-RUN curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php-20131226/libfriso.so && \
-    curl -sLo /usr/lib/php5/20131226/friso.so http://files.docker.genee.in/php-20131226/friso.so && \
+RUN \
+    # Install YAML
+    apt-get install -yq libyaml-0-2 && \
+    curl -sLo /usr/lib/php/20151012/yaml.so http://files.docker.genee.in/php-20151012/yaml.so && \
+    echo "extension=yaml.so" > /etc/php/mods-available/yaml.ini && \
+    phpenmod -v 7.0 yaml && \
+    # Install Redis
+    curl -sLo /usr/lib/php/20151012/redis.so http://files.docker.genee.in/php-20151012/redis.so && \
+    echo "extension=redis.so" > /etc/php/mods-available/redis.ini && \
+    phpenmod -v 7.0 redis && \
+    # Install Friso
+    curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php-20151012/libfriso.so && \
+    curl -sLo /usr/lib/php/20151012/friso.so http://files.docker.genee.in/php-20151012/friso.so && \
     curl -sL http://files.docker.genee.in/friso-etc.tgz | tar -zxf - -C /etc && \
-    printf "extension=friso.so\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php5/mods-available/friso.ini && \
-    php5enmod friso
-
-# Install ZeroMQ
-RUN apt-get install -yq libzmq3 && \
-    curl -sLo /usr/lib/php5/20131226/zmq.so http://files.docker.genee.in/php-20131226/zmq.so && \
-    printf "extension=zmq.so\n" > /etc/php5/mods-available/zmq.ini && \
-    ldconfig && php5enmod zmq
+    printf "extension=friso.so\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php/mods-available/friso.ini && \
+    phpenmod -v 7.0 friso && \
+    # Install ZeroMQ
+    apt-get install -yq libzmq3 && \
+    curl -sLo /usr/lib/php/20151012/zmq.so http://files.docker.genee.in/php-20151012/zmq.so && \
+    printf "extension=zmq.so\n" > /etc/php/mods-available/zmq.ini && \
+    ldconfig && phpenmod -v 7.0 zmq
 
 # Install NodeJS
 RUN apt-get install -yq npm && ln -sf /usr/bin/nodejs /usr/bin/node && npm install -g less less-plugin-clean-css uglify-js
