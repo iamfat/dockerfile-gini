@@ -49,8 +49,6 @@ RUN apk add php-dom php-ctype php-iconv && composer global require -q iamfat/gin
 RUN apk add msmtp
 ADD msmtprc /etc/msmtprc
 
-RUN apk cache clean
-
 EXPOSE 9000
 
 ADD start /start
