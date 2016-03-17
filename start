@@ -1,6 +1,6 @@
 #!/bin/sh
 
-chmod a+wt,go-r /var/lib/php5
-mkdir -p /var/lib/php5/sessions && chmod a+wt,go-r /var/lib/php5/sessions
+# chmod a+wt,go-r /var/lib/php5
+# mkdir -p /var/lib/php5/sessions && chmod a+wt,go-r /var/lib/php5/sessions
 
-/usr/sbin/php-fpm --nodaemonize --fpm-config /etc/php/php-fpm.conf
+/usr/bin/php-fpm --nodaemonize --fpm-config /etc/php/php-fpm.conf
