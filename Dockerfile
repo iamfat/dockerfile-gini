@@ -9,7 +9,7 @@ ENV TERM="xterm-color" \
 RUN apk update && apk add bash curl gettext
 
 # Install PHP
-RUN apk add php-fpm php-cli php-intl php-gd php-mcrypt php-sqlite3 php-curl php-ldap php-gettext yaml && \
+RUN apk add php-fpm php-cli php-intl php-gd php-mcrypt php-pdo php-pdo_mysql php-pdo_sqlite php-curl php-ldap php-gettext php-posix php-pcntl yaml && \
     sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/php-fpm.conf && \
     sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php/php-fpm.conf && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/php.ini
