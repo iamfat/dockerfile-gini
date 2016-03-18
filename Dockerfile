@@ -23,6 +23,10 @@ RUN curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php5/libfriso.so
     curl -sL http://files.docker.genee.in/friso-etc.tgz | tar -zxf - -C /etc && \
     printf "extension=friso.so\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php/conf.d/friso.ini
 
+# Install Redis
+RUN curl -sLo /usr/lib/php/modules/redis.so http://files.docker.genee.in/php5/redis.so && \
+    printf "extension=redis.so\n" > /etc/php/conf.d/redis.ini
+
 # Install ZeroMQ
 RUN apk add libzmq && \
     curl -sLo /usr/lib/php/modules/zmq.so http://files.docker.genee.in/php5/zmq.so && \
