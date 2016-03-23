@@ -47,7 +47,7 @@ ENV COMPOSER_PROCESS_TIMEOUT 40000
 ENV COMPOSER_HOME /usr/local/share/composer
 
 # Install Gini
-RUN apk add php-dom php-ctype php-iconv && composer global require -q iamfat/gini
+RUN apk add php-bcmath php-dom php-ctype php-iconv && composer global require -q iamfat/gini
 
 # Install msmtp-mta
 RUN apk add msmtp
