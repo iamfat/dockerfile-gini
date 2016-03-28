@@ -50,7 +50,7 @@ ENV COMPOSER_HOME /usr/local/share/composer
 RUN apk add php-bcmath php-dom php-ctype php-iconv && composer global require -q iamfat/gini
 
 # Install msmtp-mta
-RUN apk add msmtp
+RUN apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
 ADD msmtprc /etc/msmtprc
 
 EXPOSE 9000
