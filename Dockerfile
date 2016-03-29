@@ -53,6 +53,8 @@ RUN apk add php-bcmath php-dom php-ctype php-iconv && composer global require -q
 RUN apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
 ADD msmtprc /etc/msmtprc
 
+RUN rm -rf /var/cache/apk/*
+
 EXPOSE 9000
 
 ADD start /start
