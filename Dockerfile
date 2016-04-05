@@ -3,7 +3,10 @@ MAINTAINER iamfat@gmail.com
 
 ENV TERM="xterm-color" \
     MAIL_HOST="172.17.0.1" \
-    MAIL_FROM="sender@gini"
+    MAIL_FROM="sender@gini" \
+    GINI_ENV="production" \
+    COMPOSER_PROCESS_TIMEOUT=40000 \
+    COMPOSER_HOME="/usr/local/share/composer"
 
 # Install bash, curl and gettext
 RUN apk update && apk add bash curl gettext
@@ -41,10 +44,7 @@ RUN apk add git php-json php-phar php-openssl
 # Install Composer
 RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
     mv composer.phar /usr/local/bin/composer && \
-    echo 'export COMPOSER_HOME="/usr/local/share/composer"' > /etc/profile.d/composer.sh && \
-    echo 'export PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
-ENV COMPOSER_PROCESS_TIMEOUT 40000
-ENV COMPOSER_HOME /usr/local/share/composer
+    echo 'PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
 
 # Install Gini
 RUN apk add php-bcmath php-dom php-ctype php-iconv && composer global require -q iamfat/gini
@@ -56,6 +56,8 @@ ADD msmtprc /etc/msmtprc
 RUN rm -rf /var/cache/apk/*
 
 EXPOSE 9000
+
+VOLUME ["/etc/php"]
 
 ADD start /start
 CMD ["/start"]
