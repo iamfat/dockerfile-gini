@@ -47,7 +47,7 @@ RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php
     echo 'PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
 
 # Install Gini
-RUN apk add php-bcmath php-dom php-ctype php-iconv && composer global require -q iamfat/gini
+RUN apk add php-bcmath php-dom php-ctype php-iconv php-zip && composer global require -q iamfat/gini
 
 # Install msmtp-mta
 RUN apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
