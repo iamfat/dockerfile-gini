@@ -1,10 +1,16 @@
 FROM debian:8
 MAINTAINER maintain@geneegroup.com
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive \
+    TERM="xterm-color" \
+    MAIL_HOST="172.17.0.1" \
+    MAIL_FROM="sender@gini" \
+    GINI_ENV="production" \
+    COMPOSER_PROCESS_TIMEOUT=40000 \
+    COMPOSER_HOME="/usr/local/share/composer"
 
 # Install cURL
-RUN apt-get -q update && apt-get install -yq curl
+RUN apt-get -q update && apt-get install -yq curl && apt-get -y autoclean && apt-get -y clean
 
 # Install Locales
 RUN apt-get install -yq locales gettext && \
@@ -15,6 +21,7 @@ RUN apt-get install -yq locales gettext && \
 
 # Install PHP
 RUN apt-get install -yq php5-fpm php5-cli php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl php5-ldap libyaml-0-2 && \
+    apt-get -y autoclean && apt-get -y clean && \
     sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php5/fpm/pool.d/www.conf && \
     sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php5/fpm/php-fpm.conf && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/fpm/php.ini && \
@@ -32,7 +39,7 @@ RUN curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php-20131226/lib
     php5enmod friso
 
 # Install ZeroMQ
-RUN apt-get install -yq libzmq3 && \
+RUN apt-get install -yq libzmq3 && apt-get -y autoclean && apt-get -y clean && \
     curl -sLo /usr/lib/php5/20131226/zmq.so http://files.docker.genee.in/php-20131226/zmq.so && \
     printf "extension=zmq.so\n" > /etc/php5/mods-available/zmq.ini && \
     ldconfig && php5enmod zmq
@@ -46,19 +53,14 @@ RUN apt-get install -yq git
 # Install Composer
 RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
     mv composer.phar /usr/local/bin/composer && \
-    echo 'export COMPOSER_HOME="/usr/local/share/composer"' > /etc/profile.d/composer.sh && \
     echo 'export PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
-ENV COMPOSER_PROCESS_TIMEOUT 40000
-ENV COMPOSER_HOME /usr/local/share/composer
 
 # Install Gini
 RUN composer global require -q 'iamfat/gini:dev-master'
 
 # Install msmtp-mta
-RUN apt-get install -yq msmtp-mta
+RUN apt-get install -yq msmtp-mta && apt-get -y autoclean && apt-get -y clean
 ADD msmtprc /etc/msmtprc
-
-RUN apt-get -y autoremove && apt-get -y autoclean && apt-get -y clean
 
 EXPOSE 9000
 

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+sed -i "s/{{MAIL_HOST}}/$MAIL_HOST/g" /etc/msmtprc
+sed -i "s/{{MAIL_FROM}}/$MAIL_FROM/g" /etc/msmtprc
+
 chmod a+wt,go-r /var/lib/php5
 mkdir -p /var/lib/php5/sessions && chmod a+wt,go-r /var/lib/php5/sessions
 
