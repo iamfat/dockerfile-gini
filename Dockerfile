@@ -43,7 +43,7 @@ RUN apk add --no-cache php-json php-phar php-openssl \
         php-bcmath php-dom php-ctype php-iconv php-zip
 
 # Install Development Tools
-RUN apk add --no-cache less git
+RUN apk add --no-cache git
 
 # Install Composer
 RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
