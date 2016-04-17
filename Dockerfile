@@ -9,10 +9,10 @@ ENV TERM="xterm-color" \
     COMPOSER_HOME="/usr/local/share/composer"
 
 # Install bash, curl and gettext
-RUN apk update && apk add bash curl gettext
+RUN apk add --no-cache bash curl gettext
 
 # Install PHP
-RUN apk add php-fpm php-cli php-intl php-gd php-mcrypt php-pdo php-pdo_mysql php-pdo_sqlite php-curl php-ldap php-gettext php-posix php-pcntl yaml && \
+RUN apk add --no-cache php-fpm php-cli php-intl php-gd php-mcrypt php-pdo php-pdo_mysql php-pdo_sqlite php-curl php-ldap php-gettext php-posix php-pcntl yaml && \
     sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/php-fpm.conf && \
     sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php/php-fpm.conf && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/php.ini
@@ -31,15 +31,19 @@ RUN curl -sLo /usr/lib/php/modules/redis.so http://files.docker.genee.in/php5/re
     printf "extension=redis.so\n" > /etc/php/conf.d/redis.ini
 
 # Install ZeroMQ
-RUN apk add libzmq && \
+RUN apk add --no-cache libzmq && \
     curl -sLo /usr/lib/php/modules/zmq.so http://files.docker.genee.in/php5/zmq.so && \
     printf "extension=zmq.so\n" > /etc/php/conf.d/zmq.ini
 
 # Install NodeJS
-RUN apk add nodejs && npm install -g less less-plugin-clean-css uglify-js
+RUN apk add --no-cache nodejs && npm install -g less less-plugin-clean-css uglify-js
+
+# Install Other Extensions
+RUN apk add --no-cache php-json php-phar php-openssl \
+        php-bcmath php-dom php-ctype php-iconv php-zip
 
 # Install Development Tools
-RUN apk add git php-json php-phar php-openssl
+RUN apk add --no-cache less git
 
 # Install Composer
 RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
@@ -47,13 +51,11 @@ RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php
     echo 'PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
 
 # Install Gini
-RUN apk add php-bcmath php-dom php-ctype php-iconv php-zip && composer global require -q iamfat/gini
+RUN composer global require -q iamfat/gini
 
 # Install msmtp-mta
-RUN apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
+RUN apk add --no-cache msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
 ADD msmtprc /etc/msmtprc
-
-RUN rm -rf /var/cache/apk/*
 
 EXPOSE 9000
 
