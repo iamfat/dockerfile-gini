@@ -47,8 +47,8 @@ RUN apk add --no-cache git
 
 # Install Composer
 RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
-    mv composer.phar /usr/local/bin/composer && \
-    echo 'PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
+    mv composer.phar /usr/local/bin/composer
+ENV PATH="/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # Install Gini
 RUN composer global require -q iamfat/gini
