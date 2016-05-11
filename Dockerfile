@@ -40,7 +40,7 @@ RUN apk add --no-cache nodejs && npm install -g less less-plugin-clean-css uglif
 
 # Install Other Extensions
 RUN apk add --no-cache php-json php-phar php-openssl \
-        php-bcmath php-dom php-ctype php-iconv php-zip
+        php-bcmath php-dom php-ctype php-iconv php-zip php-xml
 
 # Install Development Tools
 RUN apk add --no-cache git
