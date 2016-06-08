@@ -51,7 +51,8 @@ RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php
 ENV PATH="/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # Install Gini
-RUN composer global require -q iamfat/gini
+RUN mkdir -p /data/gini-modules && git clone https://github.com/iamfat/gini /data/gini-modules/gini \
+    && cd /data/gini-modules/gini && composer update --prefer-dist
 
 # Install msmtp-mta
 RUN apk add --no-cache msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
@@ -62,5 +63,7 @@ EXPOSE 9000
 VOLUME ["/etc/php"]
 
 ADD start /start
-CMD ["/start"]
+ENTRYPOINT /data/gini-modules/gini/bin/gini
+WORKDIR /data/gini-modules
+CMD ["sh", "/start"]
 
