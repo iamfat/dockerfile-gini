@@ -48,11 +48,10 @@ RUN apk add --no-cache git
 # Install Composer
 RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
     mv composer.phar /usr/local/bin/composer
-ENV PATH="/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # Install Gini
-RUN mkdir -p /data/gini-modules && git clone https://github.com/iamfat/gini /data/gini-modules/gini \
-    && cd /data/gini-modules/gini && composer update --prefer-dist
+RUN mkdir -p /data/gini-modules && git clone https://github.com/iamfat/gini /data/gini-modules \
+    && cd /data/gini-modules/gini && /usr/local/share/composer update --prefer-dist
 
 # Install msmtp-mta
 RUN apk add --no-cache msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
@@ -61,6 +60,8 @@ ADD msmtprc /etc/msmtprc
 EXPOSE 9000
 
 VOLUME ["/etc/php"]
+
+ENV PATH="/data/gini-modules/gini/bin/gini:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 ADD start /start
 ENTRYPOINT /data/gini-modules/gini/bin/gini
