@@ -66,5 +66,4 @@ GINI_MODULE_BASE_PATH="/data/gini-modules"
 
 ADD start /start
 WORKDIR /data/gini-modules
-ENTRYPOINT ["/usr/local/share/gini/bin/gini"]
-CMD ["sh", "/start"]
+ENTRYPOINT ["/start"]
