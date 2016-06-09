@@ -38,6 +38,10 @@ RUN apk add --no-cache libzmq && \
 # Install NodeJS
 RUN apk add --no-cache nodejs && npm install -g less less-plugin-clean-css uglify-js
 
+# Install msmtp-mta
+RUN apk add --no-cache msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
+ADD msmtprc /etc/msmtprc
+
 # Install Other Extensions
 RUN apk add --no-cache php-json php-phar php-openssl \
         php-bcmath php-dom php-ctype php-iconv php-zip php-xml
@@ -55,10 +59,6 @@ RUN mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/l
     && /usr/local/bin/composer update --prefer-dist \
     && mkdir -p /data/gini-modules
 
-# Install msmtp-mta
-RUN apk add --no-cache msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
-ADD msmtprc /etc/msmtprc
-
 EXPOSE 9000
 
 ENV PATH="/usr/local/share/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
@@ -66,5 +66,5 @@ GINI_MODULE_BASE_PATH="/data/gini-modules"
 
 ADD start /start
 WORKDIR /data/gini-modules
-ENTRYPOINT ["gini"]
+ENTRYPOINT ["/usr/local/share/gini/bin/gini"]
 CMD ["sh", "/start"]
