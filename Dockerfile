@@ -50,8 +50,10 @@ RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php
     mv composer.phar /usr/local/bin/composer
 
 # Install Gini
-RUN mkdir -p /data/gini-modules && git clone https://github.com/iamfat/gini /data/gini-modules \
-    && cd /data/gini-modules/gini && /usr/local/share/composer update --prefer-dist
+RUN mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
+    && cd /usr/local/share/gini && bin/gini composer init -f \
+    && /usr/local/bin/composer update --prefer-dist \
+    && mkdir -p /data/gini-modules
 
 # Install msmtp-mta
 RUN apk add --no-cache msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
@@ -59,12 +61,10 @@ ADD msmtprc /etc/msmtprc
 
 EXPOSE 9000
 
-VOLUME ["/etc/php"]
-
-ENV PATH="/data/gini-modules/gini/bin/gini:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV PATH="/usr/local/share/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+GINI_MODULE_BASE_PATH="/data/gini-modules"
 
 ADD start /start
-ENTRYPOINT /data/gini-modules/gini/bin/gini
 WORKDIR /data/gini-modules
+ENTRYPOINT ["gini"]
 CMD ["sh", "/start"]
-
