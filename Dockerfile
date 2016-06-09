@@ -47,6 +47,10 @@ RUN apt-get install -yq libzmq3 && apt-get -y autoclean && apt-get -y clean && \
 # Install NodeJS
 RUN apt-get install -yq npm && ln -sf /usr/bin/nodejs /usr/bin/node && npm install -g less less-plugin-clean-css uglify-js
 
+# Install msmtp-mta
+RUN apt-get install -yq msmtp-mta && apt-get -y autoclean && apt-get -y clean
+ADD msmtprc /etc/msmtprc
+
 # Install Development Tools
 RUN apt-get install -yq git
 
@@ -56,14 +60,18 @@ RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php
     echo 'export PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
 
 # Install Gini
-RUN composer global require -q 'iamfat/gini:dev-master'
-
-# Install msmtp-mta
-RUN apt-get install -yq msmtp-mta && apt-get -y autoclean && apt-get -y clean
-ADD msmtprc /etc/msmtprc
+RUN mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
+    && cd /usr/local/share/gini && bin/gini composer init -f \
+    && /usr/local/bin/composer update --prefer-dist \
+    && mkdir -p /data/gini-modules
 
 EXPOSE 9000
 
+ENV PATH="/usr/local/share/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+GINI_MODULE_BASE_PATH="/data/gini-modules"
+
 ADD start /start
-CMD ["/start"]
+WORKDIR /data/gini-modules
+ENTRYPOINT ["/usr/local/share/gini/bin/gini"]
+CMD ["sh", "/start"]
 
