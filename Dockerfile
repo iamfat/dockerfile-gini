@@ -56,7 +56,7 @@ RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php
 # Install Gini
 RUN mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
     && cd /usr/local/share/gini && bin/gini composer init -f \
-    && /usr/local/bin/composer update --prefer-dist \
+    && /usr/local/bin/composer update --prefer-dist --no-dev \
     && mkdir -p /data/gini-modules
 
 EXPOSE 9000
