@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_HOME="/usr/local/share/composer"
 
 # Install cURL
-RUN apt-get -q update && apt-get install -yq curl && apt-get -y autoclean && apt-get -y clean
+RUN apt-get -q update && apt-get install -yq curl bash vim && apt-get -y autoclean && apt-get -y clean
 
 # Install Locales
 RUN apt-get install -yq locales gettext && \
