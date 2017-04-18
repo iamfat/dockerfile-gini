@@ -44,7 +44,7 @@ RUN apk add --no-cache php7-json php7-phar php7-openssl \
 RUN apk add --no-cache git
 
 # Install Composer
-RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
+RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php7) && \
     mv composer.phar /usr/local/bin/composer
 
 # Install Gini
