@@ -12,7 +12,11 @@ ENV TERM="xterm-color" \
 RUN apk add --no-cache bash curl gettext
 
 # Install PHP7
-RUN apk add --no-cache php7-fpm php7-intl php7-gd php7-mcrypt php7-pdo php7-pdo_mysql php7-pdo_sqlite php7-curl php7-ldap php7-gettext php7-posix php7-pcntl yaml \
+RUN apk add --no-cache php7-fpm php7-session php7-intl php7-gd \
+      php7-mcrypt php7-pdo php7-pdo_mysql php7-pdo_sqlite php7-curl \
+      php7-json php7-phar php7-openssl php7-bcmath php7-dom php7-ctype \
+      php7-iconv php7-zip php7-xml php7-zlib \
+      php7-ldap php7-gettext php7-posix php7-pcntl yaml \
     && sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php7/php-fpm.conf \
     && sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php7/php-fpm.conf \
     && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php7/php.ini \
@@ -20,7 +24,7 @@ RUN apk add --no-cache php7-fpm php7-intl php7-gd php7-mcrypt php7-pdo php7-pdo_
     && ln -sf /usr/bin/php7 /usr/bin/php
 
 RUN curl -sLo /usr/lib/php7/modules/yaml.so http://files.docker.genee.in/php7/yaml.so \
-    && echo "extension=yaml.so" > /etc/php7/conf.d/yaml.ini
+    && printf "extension=yaml.so\n" > /etc/php7/conf.d/yaml.ini
 
 # Install Redis
 RUN curl -sLo /usr/lib/php7/modules/redis.so http://files.docker.genee.in/php7/redis.so \
@@ -30,10 +34,6 @@ RUN curl -sLo /usr/lib/php7/modules/redis.so http://files.docker.genee.in/php7/r
 RUN apk add --no-cache libzmq \
     && curl -sLo /usr/lib/php7/modules/zmq.so http://files.docker.genee.in/php7/zmq.so \
     && printf "extension=zmq.so\n" > /etc/php7/conf.d/zmq.ini
-
-# Install Other Extensions
-RUN apk add --no-cache php7-json php7-phar php7-openssl \
-        php7-bcmath php7-dom php7-ctype php7-iconv php7-zip php7-xml php7-zlib
 
 # Install NodeJS
 RUN apk add --no-cache nodejs && npm install -g less less-plugin-clean-css uglify-js
