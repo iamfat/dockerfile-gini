@@ -18,7 +18,7 @@ RUN apk add --no-cache php7-fpm php7-intl php7-gd php7-mcrypt php7-pdo php7-pdo_
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php7/php.ini
 
 RUN curl -sLo /usr/lib/php7/modules/yaml.so http://files.docker.genee.in/php7/yaml.so && \
-    echo "extension=yaml.so" > /etc/php/conf.d/yaml.ini
+    echo "extension=yaml.so" > /etc/php7/conf.d/yaml.ini
 
 # Install Redis
 RUN curl -sLo /usr/lib/php7/modules/redis.so http://files.docker.genee.in/php7/redis.so && \
