@@ -12,7 +12,7 @@ ENV TERM="xterm-color" \
 RUN apk add --no-cache bash curl gettext
 
 # Install PHP7
-RUN apk add --no-cache php7-fpm \
+RUN apk add --no-cache php7 php7-fpm \
     && sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php7/php-fpm.conf \
     && sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php7/php-fpm.conf \
     && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php7/php.ini \
@@ -40,7 +40,7 @@ RUN apk add --no-cache libzmq \
     && printf "extension=zmq.so\n" > /etc/php7/conf.d/zmq.ini
 
 # Install NodeJS
-RUN apk add --no-cache nodejs && npm install -g less less-plugin-clean-css uglify-js
+RUN apk add --no-cache nodejs nodejs-npm && npm install -g less less-plugin-clean-css uglify-js
 
 # Install msmtp-mta
 RUN apk add --no-cache msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail
