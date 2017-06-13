@@ -29,7 +29,7 @@ RUN apt-get install -yq php5-fpm php5-cli && \
     export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
     export PHP_VERSION=$(basename $PHP_EXTENSION_DIR)
 
-RUN apt-get install php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl php5-ldap libyaml-0-2
+RUN apt-get install -yq php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl php5-ldap libyaml-0-2
 
 RUN curl -sLo $PHP_EXTENSION_DIR/yaml.so http://files.docker.genee.in/php-$PHP_VERSION/yaml.so && \
     echo "extension=yaml.so" > /etc/php5/mods-available/yaml.ini && \
