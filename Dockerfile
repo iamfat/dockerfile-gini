@@ -25,25 +25,29 @@ RUN apt-get install -yq php5-fpm php5-cli && \
     sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php5/fpm/pool.d/www.conf && \
     sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php5/fpm/php-fpm.conf && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/fpm/php.ini && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini && \
-    export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
-    export PHP_VERSION=$(basename $PHP_EXTENSION_DIR)
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php5/cli/php.ini
 
 RUN apt-get install -yq php5-intl php5-gd php5-mcrypt php5-mysqlnd php5-redis php5-sqlite php5-curl php5-ldap libyaml-0-2
 
-RUN curl -sLo $PHP_EXTENSION_DIR/yaml.so http://files.docker.genee.in/php-$PHP_VERSION/yaml.so && \
+RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
+    export PHP_VERSION=$(basename $PHP_EXTENSION_DIR) && \
+    curl -sLo $PHP_EXTENSION_DIR/yaml.so http://files.docker.genee.in/php-$PHP_VERSION/yaml.so && \
     echo "extension=yaml.so" > /etc/php5/mods-available/yaml.ini && \
     php5enmod yaml
 
 # Install Friso
-RUN curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php-$PHP_VERSION/libfriso.so && \
+RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
+    export PHP_VERSION=$(basename $PHP_EXTENSION_DIR) && \
+    curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php-$PHP_VERSION/libfriso.so && \
     curl -sLo $PHP_EXTENSION_DIR/friso.so http://files.docker.genee.in/php-$PHP_VERSION/friso.so && \
     curl -sL http://files.docker.genee.in/friso-etc.tgz | tar -zxf - -C /etc && \
     printf "extension=friso.so\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php5/mods-available/friso.ini && \
     php5enmod friso
 
 # Install ZeroMQ
-RUN apt-get install -yq libzmq3 && apt-get -y autoclean && apt-get -y clean && \
+RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
+    export PHP_VERSION=$(basename $PHP_EXTENSION_DIR) && \
+    apt-get install -yq libzmq3 && apt-get -y autoclean && apt-get -y clean && \
     curl -sLo $PHP_EXTENSION_DIR/zmq.so http://files.docker.genee.in/php-$PHP_VERSION/zmq.so && \
     printf "extension=zmq.so\n" > /etc/php5/mods-available/zmq.ini && \
     ldconfig && php5enmod zmq
