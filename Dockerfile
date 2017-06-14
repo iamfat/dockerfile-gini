@@ -27,17 +27,20 @@ RUN apk add --no-cache php7-session php7-intl php7-gd \
       php7-ldap php7-gettext php7-posix php7-pcntl
 
 RUN apk add --no-cache yaml \
-    && curl -sLo /usr/lib/php7/modules/yaml.so http://files.docker.genee.in/php7/yaml.so \
-    && printf "extension=yaml.so\n" > /etc/php7/conf.d/yaml.ini
+    && export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
+    && curl -sLo /usr/lib/php7/modules/yaml.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/yaml.so" \
+    && printf "extension=yaml.so\n" > /etc/php7/conf.d/00_yaml.ini
 
 # Install Redis
-RUN curl -sLo /usr/lib/php7/modules/redis.so http://files.docker.genee.in/php7/redis.so \
-    && printf "extension=redis.so\n" > /etc/php7/conf.d/redis.ini
+RUN export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
+    && curl -sLo /usr/lib/php7/modules/redis.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/redis.so" \
+    && printf "extension=redis.so\n" > /etc/php7/conf.d/00_redis.ini
 
 # Install ZeroMQ
 RUN apk add --no-cache libzmq \
-    && curl -sLo /usr/lib/php7/modules/zmq.so http://files.docker.genee.in/php7/zmq.so \
-    && printf "extension=zmq.so\n" > /etc/php7/conf.d/zmq.ini
+    && export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
+    && curl -sLo /usr/lib/php7/modules/zmq.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/zmq.so" \
+    && printf "extension=zmq.so\n" > /etc/php7/conf.d/00_zmq.ini
 
 # Install NodeJS
 RUN apk add --no-cache nodejs nodejs-npm && npm install -g less less-plugin-clean-css uglify-js
