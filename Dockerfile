@@ -42,6 +42,13 @@ RUN apk add --no-cache libzmq \
     && curl -sLo /usr/lib/php7/modules/zmq.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/zmq.so" \
     && printf "extension=zmq.so\n" > /etc/php7/conf.d/00_zmq.ini
 
+# Install Friso
+RUN export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
+    && curl -sLo /usr/lib/libfriso.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/libfriso.so" \
+    && curl -sLo /usr/lib/php7/modules/friso.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/friso.so" \
+    && curl -sL http://files.docker.genee.in/friso-etc.tgz | tar -zxf - -C /etc \
+    && printf "extension=friso.so\n\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php7/conf.d/00_friso.ini
+
 # Install NodeJS
 RUN apk add --no-cache nodejs nodejs-npm && npm install -g less less-plugin-clean-css uglify-js
 
