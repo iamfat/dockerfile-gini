@@ -21,19 +21,16 @@ RUN apk add --no-cache bash curl gettext \
       php7-json php7-phar php7-openssl php7-bcmath php7-dom php7-ctype \
       php7-iconv php7-zip php7-xml php7-zlib php7-mbstring \
       php7-ldap php7-gettext php7-posix php7-pcntl php7-simplexml php7-tokenizer php7-xmlwriter \
+    && export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
     && apk add --no-cache yaml \
-      && export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
       && curl -sLo /usr/lib/php7/modules/yaml.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/yaml.so" \
       && printf "extension=yaml.so\n" > /etc/php7/conf.d/00_yaml.ini \
-    && export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
-      && curl -sLo /usr/lib/php7/modules/redis.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/redis.so" \
+    && curl -sLo /usr/lib/php7/modules/redis.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/redis.so" \
       && printf "extension=redis.so\n" > /etc/php7/conf.d/00_redis.ini \
     && apk add --no-cache libzmq \
-      && export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
       && curl -sLo /usr/lib/php7/modules/zmq.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/zmq.so" \
       && printf "extension=zmq.so\n" > /etc/php7/conf.d/00_zmq.ini \
-    && export PHP_EXTENSION_PATH=php-$(echo '<?= PHP_VERSION_ID ?>'|php7) \
-      && curl -sLo /usr/lib/libfriso.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/libfriso.so" \
+    && curl -sLo /usr/lib/libfriso.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/libfriso.so" \
       && curl -sLo /usr/lib/php7/modules/friso.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/friso.so" \
       && curl -sL http://files.docker.genee.in/friso-etc.tgz | tar -zxf - -C /etc \
       && printf "extension=friso.so\n\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php7/conf.d/00_friso.ini \
