@@ -39,16 +39,16 @@ RUN apk add --no-cache bash curl gettext \
     && apk add --no-cache git \
     && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
       && mv composer.phar /usr/local/bin/composer \
-    && mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
-        && cd /usr/local/share/gini && bin/gini composer init -f \
-        && /usr/local/bin/composer update --prefer-dist --no-dev \
+    && mkdir -p /data/gini-modules && git clone https://github.com/iamfat/gini /data/gini-modules/gini \
+        && cd /data/gini-modules/gini && bin/gini composer init -f \
+        && /usr/local/bin/composer install --no-dev \
         && mkdir -p /data/gini-modules
 
 ADD msmtprc /etc/msmtprc
 
 EXPOSE 9000
 
-ENV PATH="/usr/local/share/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+ENV PATH="/data/gini-modules/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
 GINI_MODULE_BASE_PATH="/data/gini-modules"
 
 ADD start /start
