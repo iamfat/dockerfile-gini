@@ -26,7 +26,7 @@ RUN apk add --no-cache bash curl gettext \
       && curl -sLo /usr/lib/php7/modules/yaml.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/yaml.so" \
       && printf "extension=yaml.so\n" > /etc/php7/conf.d/00_yaml.ini \
     && curl -sLo /usr/lib/php7/modules/redis.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/redis.so" \
-      && printf "extension=redis.so\n" > /etc/php7/conf.d/00_redis.ini \
+      && printf "extension=redis.so\n" > /etc/php7/conf.d/10_redis.ini \
     && apk add --no-cache libzmq \
       && curl -sLo /usr/lib/php7/modules/zmq.so "http://files.docker.genee.in/${PHP_EXTENSION_PATH}/zmq.so" \
       && printf "extension=zmq.so\n" > /etc/php7/conf.d/00_zmq.ini \
