@@ -15,7 +15,6 @@ RUN apk update \
     && apk add bash curl gettext php7 php7-fpm \
       && sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php7/php-fpm.conf \
       && sed -i 's/^\;error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php7/php-fpm.conf \
-      && sed -i 's/^\[global\]$/[global]\ncatch_workers_output = yes/' /etc/php7/php-fpm.conf \
       && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php7/php.ini \
       && ln -sf /usr/sbin/php-fpm7 /usr/sbin/php-fpm \
       && ln -sf /usr/bin/php7 /usr/bin/php \
