@@ -27,10 +27,10 @@ RUN apk update \
     && apk add git \
     && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
       && mv composer.phar /usr/local/bin/composer \
-    && mkdir -p /data/gini-modules && git clone https://github.com/iamfat/gini /data/gini-modules/gini \
-        && cd /data/gini-modules/gini && bin/gini composer init -f \
+    && mkdir -p /data/gini-modules && git clone https://github.com/iamfat/gini /usr/local/share/gini \
+        && cd /usr/local/share/gini && bin/gini composer init -f \
         && /usr/local/bin/composer install --no-dev \
-        && mkdir -p /data/gini-modules \
+        && bin/gini cache \
     && rm -rf /var/cache/apk/*
 
 ADD msmtprc /etc/msmtprc
