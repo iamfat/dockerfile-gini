@@ -1,15 +1,16 @@
-FROM debian:8
-MAINTAINER iamfat@gmail.com
+FROM debian:9
+MAINTAINER maintain@geneegroup.com
 
-ENV DEBIAN_FRONTEND noninteractive
-
+ENV DEBIAN_FRONTEND=noninteractive \
+    TERM="xterm-color" \
+    MAIL_HOST="172.17.0.1" \
+    MAIL_FROM="sender@gini" \
+    GINI_ENV="production" \
+    COMPOSER_PROCESS_TIMEOUT=40000 \
+    COMPOSER_HOME="/usr/local/share/composer"
+    
 # Install cURL
-RUN apt-get -q update && apt-get install -yq curl
-
-# Add DotDeb Source
-RUN echo "deb http://packages.dotdeb.org jessie all">/etc/apt/sources.list.d/dotdeb.list && \
-    curl -sLo /tmp/dotdeb.gpg https://www.dotdeb.org/dotdeb.gpg && \
-    apt-key add /tmp/dotdeb.gpg && rm /tmp/dotdeb.gpg && apt-get update
+RUN apt-get -q update && apt-get install -yq curl bash vim && apt-get -y autoclean && apt-get -y clean
 
 # Install Locales
 RUN apt-get install -yq locales gettext && \
@@ -19,36 +20,41 @@ RUN apt-get install -yq locales gettext && \
     /usr/sbin/update-locale LANG="en_US.UTF-8" LANGUAGE="en_US:en"
 
 # Install PHP
-RUN apt-get install -yq php7.0-fpm php7.0-cli php7.0-intl php7.0-gd php7.0-sqlite php7.0-curl php7.0-ldap php7.0-json && \
+RUN apt-get install -yq php7.0-fpm php7.0-cli && \
+    apt-get -y autoclean && apt-get -y clean && \
     sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/7.0/fpm/pool.d/www.conf && \
     sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php/7.0/fpm/php-fpm.conf && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/fpm/php.ini && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/cli/php.ini
 
-RUN \
-    # Install YAML
-    apt-get install -yq libyaml-0-2 && \
-    curl -sLo /usr/lib/php/20151012/yaml.so http://files.docker.genee.in/php-20151012/yaml.so && \
-    echo "extension=yaml.so" > /etc/php/mods-available/yaml.ini && \
-    phpenmod -v 7.0 yaml && \
-    # Install Redis
-    curl -sLo /usr/lib/php/20151012/redis.so http://files.docker.genee.in/php-20151012/redis.so && \
-    echo "extension=redis.so" > /etc/php/mods-available/redis.ini && \
-    phpenmod -v 7.0 redis && \
-    # Install Friso
-    curl -sLo /usr/lib/libfriso.so http://files.docker.genee.in/php-20151012/libfriso.so && \
-    curl -sLo /usr/lib/php/20151012/friso.so http://files.docker.genee.in/php-20151012/friso.so && \
-    curl -sL http://files.docker.genee.in/friso-etc.tgz | tar -zxf - -C /etc && \
-    printf "extension=friso.so\n[friso]\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php/mods-available/friso.ini && \
-    phpenmod -v 7.0 friso && \
-    # Install ZeroMQ
-    apt-get install -yq libzmq3 && \
-    curl -sLo /usr/lib/php/20151012/zmq.so http://files.docker.genee.in/php-20151012/zmq.so && \
-    printf "extension=zmq.so\n" > /etc/php/mods-available/zmq.ini && \
-    ldconfig && phpenmod -v 7.0 zmq
+RUN apt-get install -yq php7.0-intl php7.0-gd php7.0-mcrypt php7.0-mysqlnd php7.0-redis php7.0-sqlite php7.0-curl php7.0-ldap php-pecl-http
+
+RUN apt-get install -yq libyaml-dev && \
+    pecl install yaml && \
+    echo "extension=yaml.so" > /etc/php/7.0/mods-available/yaml.ini && \
+    phpenmod yaml
+
+# Install Friso
+RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
+    curl -sLo /usr/lib/libfriso.so http://docker.17ker.top/libfriso.so && \
+    curl -sLo $PHP_EXTENSION_DIR/friso.so http://docker.17ker.top/friso.so && \
+    mkdir /etc/friso && \
+    curl -sLo /etc/friso/friso.ini http://docker.17ker.top/friso.ini && \
+    printf "extension=friso.so\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php/7.0/mods-available/friso.ini && \
+    phpenmod friso
+
+# Install ZeroMQ
+RUN apt-get install -yq pkg-config libzmq3-dev && \
+    pecl install zmq-1.1.3 && \
+    echo "extension=zmq.so" > /etc/php/7.0/mods-available/zmq.ini && \
+    phpenmod zmq
 
 # Install NodeJS
 RUN apt-get install -yq npm && ln -sf /usr/bin/nodejs /usr/bin/node && npm install -g less less-plugin-clean-css uglify-js
+
+# Install msmtp-mta
+RUN apt-get install -yq msmtp-mta && apt-get -y autoclean && apt-get -y clean
+ADD msmtprc /etc/msmtprc
 
 # Install Development Tools
 RUN apt-get install -yq git
@@ -56,22 +62,19 @@ RUN apt-get install -yq git
 # Install Composer
 RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
     mv composer.phar /usr/local/bin/composer && \
-    echo 'export COMPOSER_HOME="/usr/local/share/composer"' > /etc/profile.d/composer.sh && \
     echo 'export PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh
-ENV COMPOSER_PROCESS_TIMEOUT 40000
-ENV COMPOSER_HOME /usr/local/share/composer
 
 # Install Gini
-RUN composer global require -q 'iamfat/gini:dev-master'
-
-# Install msmtp-mta
-RUN apt-get install -yq msmtp-mta
-ADD msmtprc /etc/msmtprc
-
-RUN apt-get -y autoremove && apt-get -y autoclean && apt-get -y clean
+RUN mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
+    && cd /usr/local/share/gini && bin/gini composer init -f \
+    && /usr/local/bin/composer update --prefer-dist --no-dev \
+    && mkdir -p /data/gini-modules
 
 EXPOSE 9000
 
-ADD start /start
-CMD ["/start"]
+ENV PATH="/usr/local/share/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+GINI_MODULE_BASE_PATH="/data/gini-modules"
 
+ADD start /start
+WORKDIR /data/gini-modules
+ENTRYPOINT ["/start"]
