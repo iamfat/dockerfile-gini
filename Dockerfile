@@ -27,7 +27,7 @@ RUN apt-get install -yq php7.0-fpm php7.0-cli && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/fpm/php.ini && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/cli/php.ini
 
-RUN apt-get install -yq php7.0-intl php7.0-gd php7.0-mcrypt php7.0-mysqlnd php7.0-redis php7.0-sqlite php7.0-curl php7.0-ldap php-pecl-http
+RUN apt-get install -yq php7.0-intl php7.0-gd php7.0-mcrypt php7.0-mysqlnd php7.0-redis php7.0-sqlite php7.0-curl php7.0-ldap php-dev
 
 RUN apt-get install -yq libyaml-dev && \
     pecl install yaml && \
@@ -50,7 +50,10 @@ RUN apt-get install -yq pkg-config libzmq3-dev && \
     phpenmod zmq
 
 # Install NodeJS
-RUN apt-get install -yq npm && ln -sf /usr/bin/nodejs /usr/bin/node && npm install -g less less-plugin-clean-css uglify-js
+RUN apt-get install -yq gnupg && \
+    curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
+    apt-get install -yq nodejs && \
+    npm install -g less less-plugin-clean-css uglify-js
 
 # Install msmtp-mta
 RUN apt-get install -yq msmtp-mta && apt-get -y autoclean && apt-get -y clean
