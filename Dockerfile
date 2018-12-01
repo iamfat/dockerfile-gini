@@ -38,8 +38,7 @@ RUN apt-get install -yq libyaml-dev && \
 RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
     curl -sLo /usr/lib/libfriso.so http://docker.17ker.top/libfriso.so && \
     curl -sLo $PHP_EXTENSION_DIR/friso.so http://docker.17ker.top/friso.so && \
-    mkdir /etc/friso && \
-    curl -sLo /etc/friso/friso.ini http://docker.17ker.top/friso.ini && \
+    curl -sL http://docker.17ker.top/friso-etc.tar.gz | tar -xvzf - -C /etc && \
     printf "extension=friso.so\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php/7.0/mods-available/friso.ini && \
     phpenmod friso
 
@@ -52,6 +51,7 @@ RUN apt-get install -yq pkg-config libzmq3-dev && \
 # Install NodeJS
 RUN apt-get install -yq gnupg && \
     curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
     apt-get install -yq nodejs && \
     npm install -g less less-plugin-clean-css uglify-js
 
