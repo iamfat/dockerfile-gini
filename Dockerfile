@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.9
 MAINTAINER iamfat@gmail.com
 
 ENV TERM="xterm-color" \
