@@ -38,9 +38,9 @@ RUN apt-get install -yq libyaml-dev && \
 
 # Install Friso
 RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
-    curl -sLo /usr/lib/libfriso.so http://docker.17ker.top/libfriso.so && \
-    curl -sLo $PHP_EXTENSION_DIR/friso.so http://docker.17ker.top/friso.so && \
-    curl -sL http://docker.17ker.top/friso-etc.tar.gz | tar -xvzf - -C /etc && \
+    curl -sLo /usr/lib/libfriso.so http://files.genee.cn/debian/php-7.0/libfriso.so && \
+    curl -sLo $PHP_EXTENSION_DIR/friso.so http://files.genee.cn/debian/php-7.0/friso.so && \
+    curl -sL http://files.genee.cn/debian/php-7.0/friso-etc.tar.gz | tar -xvzf - -C /etc && \
     printf "extension=friso.so\nfriso.ini_file=/etc/friso/friso.ini\n" > /etc/php/7.0/mods-available/friso.ini && \
     phpenmod friso
 
