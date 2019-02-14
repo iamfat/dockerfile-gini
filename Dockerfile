@@ -27,12 +27,14 @@ RUN apt-get install -yq php7.0-fpm php7.0-cli && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/fpm/php.ini && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/cli/php.ini
 
-RUN apt-get install -yq php7.0-intl php7.0-gd php7.0-mcrypt php7.0-mysqlnd php7.0-redis php7.0-sqlite php7.0-curl php7.0-ldap php-dev
+RUN apt-get install -yq php7.0-intl php7.0-gd php7.0-mcrypt php7.0-mysqlnd php7.0-redis php7.0-sqlite php7.0-curl php7.0-mbstring php7.0-ldap php-dev
 
 RUN apt-get install -yq libyaml-dev && \
-    pecl install yaml && \
+    curl -sLo /tmp/yaml-2.0.4.tgz https://pecl.php.net/get/yaml-2.0.4.tgz && \
+    pecl install yaml-2.0.4 && \
     echo "extension=yaml.so" > /etc/php/7.0/mods-available/yaml.ini && \
-    phpenmod yaml
+    phpenmod yaml && \
+    rm -rf /tmp/yaml-2.0.4.tgz
 
 # Install Friso
 RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
@@ -44,9 +46,11 @@ RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
 
 # Install ZeroMQ
 RUN apt-get install -yq pkg-config libzmq3-dev && \
-    pecl install zmq-1.1.3 && \
+    curl -sLo /tmp/zmq-1.1.3.tgz https://pecl.php.net/get/zmq-1.1.3.tgz && \
+    pecl install /tmp/zmq-1.1.3.tgz && \
     echo "extension=zmq.so" > /etc/php/7.0/mods-available/zmq.ini && \
-    phpenmod zmq
+    phpenmod zmq && \
+    rm -rf /tmp/zmq-1.1.3.tgz
 
 # Install NodeJS
 RUN apt-get install -yq gnupg && \
