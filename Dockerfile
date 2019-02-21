@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_HOME="/usr/local/share/composer"
     
 # Install cURL
-RUN apt-get -q update && apt-get install -yq curl bash vim && apt-get -y autoclean && apt-get -y clean
+RUN apt-get -q update && apt-get install -yq curl bash vim unzip && apt-get -y autoclean && apt-get -y clean
 
 # Install Locales
 RUN apt-get install -yq locales gettext && \
@@ -27,7 +27,7 @@ RUN apt-get install -yq php7.0-fpm php7.0-cli && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/fpm/php.ini && \
     sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.0/cli/php.ini
 
-RUN apt-get install -yq php7.0-intl php7.0-gd php7.0-mcrypt php7.0-mysqlnd php7.0-redis php7.0-sqlite php7.0-curl php7.0-mbstring php7.0-ldap php-dev
+RUN apt-get install -yq php7.0-intl php7.0-gd php7.0-mcrypt php7.0-mysqlnd php7.0-redis php7.0-sqlite php7.0-curl php7.0-zip php7.0-mbstring php7.0-ldap php-dev
 
 RUN apt-get install -yq libyaml-dev && \
     curl -sLo /tmp/yaml-2.0.4.tgz https://pecl.php.net/get/yaml-2.0.4.tgz && \
