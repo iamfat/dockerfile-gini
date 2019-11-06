@@ -36,15 +36,19 @@ RUN curl -fsSL https://packages.sury.org/php/apt.gpg | apt-key add - && \
 RUN apt-get install -yq php7.2-intl php7.2-gd php7.2-mysqlnd php7.2-redis php7.2-sqlite php7.2-curl php7.2-zip php7.2-mbstring php7.2-ldap php7.2-dev php7.2-xml
 
 RUN apt-get install -yq libyaml-dev && \
-    pecl install https://pecl.php.net/get/yaml-2.0.4.tgz && \
+    curl -sLo /tmp/yaml-2.0.4.tgz https://pecl.php.net/get/yaml-2.0.4.tgz && \
+    pecl install /tmp/yaml-2.0.4.tgz && \
     echo "extension=yaml.so" > /etc/php/7.2/mods-available/yaml.ini && \
-    phpenmod yaml
+    phpenmod yaml && \
+    rm -rf /tmp/yaml-2.0.4.tgz 
 
 # Install mcrypt
 RUN apt-get -yq install libmcrypt-dev && \
-    pecl install https://pecl.php.net/get/mcrypt-1.0.3.tgz && \
+    curl -sLo /tmp/mcrypt-1.0.3.tgz https://pecl.php.net/get/mcrypt-1.0.3.tgz && \
+    pecl install /tmp/mcrypt-1.0.3.tgz && \
     echo "extension=mcrypt.so" > /etc/php/7.2/mods-available/mcrypt.ini && \
-    phpenmod mcrypt
+    phpenmod mcrypt && \
+    rm -rf /tmp/mcrypt-1.0.3.tgz
 
 # Install Friso
 RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
@@ -56,9 +60,11 @@ RUN export PHP_EXTENSION_DIR=$(echo '<?= PHP_EXTENSION_DIR ?>'|php) && \
 
 # Install ZeroMQ
 RUN apt-get install -yq pkg-config libzmq3-dev && \
-    pecl install https://pecl.php.net/get/zmq-1.1.3.tgz && \
+    curl -sLo /tmp/zmq-1.1.3.tgz https://pecl.php.net/get/zmq-1.1.3.tgz && \
+    pecl install /tmp/zmq-1.1.3.tgz && \
     echo "extension=zmq.so" > /etc/php/7.2/mods-available/zmq.ini && \
-    phpenmod zmq
+    phpenmod zmq && \
+    rm -rf /tmp/zmq-1.1.3.tgz
 
 # Install NodeJS
 RUN apt-get install -yq gnupg && \
@@ -83,6 +89,7 @@ RUN mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php
 RUN mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
     && cd /usr/local/share/gini && bin/gini composer init -f \
     && /usr/local/bin/composer update --prefer-dist --no-dev \
+    && apt-get -y --purge remove git && apt-get -y autoremove && apt-get -y autoclean && apt-get -y clean \
     && mkdir -p /data/gini-modules
 
 EXPOSE 9000
