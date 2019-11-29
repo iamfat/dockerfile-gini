@@ -35,7 +35,7 @@ RUN apt-get install -yq software-properties-common apt-transport-https gnupg && 
     apt-get -y autoclean && apt-get -y clean
 
 RUN apt-get install -yq apt-transport-https \
-    && apt-get install -yq php7.1-intl php7.1-gd php7.1-mysqlnd php7.1-redis php7.1-sqlite php7.1-curl php7.1-zip php7.1-mbstring php7.1-ldap php7.1-yaml php7.1-zmq php7.1-mcrypt \
+    && apt-get install -yq php7.1-intl php7.1-gd php7.1-mysqlnd php7.1-redis php7.1-sqlite php7.1-curl php7.1-zip php7.1-mbstring php7.1-ldap php7.1-yaml php7.1-zmq php7.1-mcrypt php7.1-xml \
     && apt-get -y --purge remove apt-transport-https \
     && apt-get -y autoremove \
     && apt-get -y autoclean && apt-get -y clean 
