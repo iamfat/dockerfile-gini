@@ -1,11 +1,11 @@
-Docker Hub: iamfat/gini
+Docker Hub: genee/gini
 ===========
 
-## Gini Environment (Gini + Composer + PHP5.5)
+## Gini Environment (Gini + Composer + PHP)
 ```bash
-docker build -t iamfat/gini gini
-docker run --name gini --privileged \
-    -v /dev/log:/dev/log -v /data:/data \
-    --link mysql:mysql --link redis:redis \
-    -d iamfat/gini
+genee/gini:latest    # Debian 9 + PHP 5
+genee/gini:php7      # Ubuntu 18.04 + PHP 7.1
+genee/gini:php7-oci8 # Ubuntu 18.04 + PHP 7.1 + OCI8 (Oracle Instance Client - Basic Lite)
+genee/gini:alpine    # Alpine 3.7 + PHP 7.1
+genee/gini:alpine-39 # Alpine 3.9 + PHP 7.2
 ```
