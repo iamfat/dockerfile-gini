@@ -25,9 +25,8 @@ RUN apt-get -q update && \
         apt-get update && \
         apt-get install -yq php7.1-fpm php7.1-cli && \
         sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/7.1/fpm/pool.d/www.conf && \
-        sed -i 's/^error_log\s*=.*$/error_log = syslog/' /etc/php/7.1/fpm/php-fpm.conf && \
-        sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.1/fpm/php.ini && \
-        sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = syslog/' /etc/php/7.1/cli/php.ini && \
+        sed -i 's/^error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php/7.1/fpm/php-fpm.conf && \
+        sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php/7.1/fpm/php.ini && \
     # Install PHP modules
     apt-get install -yq php7.1-intl php7.1-gd php7.1-mysqlnd php7.1-redis \
         php7.1-sqlite php7.1-curl php7.1-zip php7.1-mbstring php7.1-ldap php7.1-yaml \
