@@ -3,4 +3,7 @@
 mkdir -p /run/php
 chmod a+wt,go-r /var/lib/php
 
+sed -i "s/{{MAIL_HOST}}/$MAIL_HOST/g" /etc/msmtprc
+sed -i "s/{{MAIL_FROM}}/$MAIL_FROM/g" /etc/msmtprc
+
 /usr/sbin/php-fpm7.1 --nodaemonize --fpm-config /etc/php/7.1/fpm/php-fpm.conf
