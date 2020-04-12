@@ -1,5 +1,5 @@
 FROM alpine:3.7
-MAINTAINER iamfat@gmail.com
+LABEL maintainer=iamfat@gmail.com
 
 ENV TERM="xterm-color" \
     MAIL_HOST="172.17.0.1" \
@@ -14,6 +14,7 @@ ADD pei.bash /usr/local/bin/pei
 RUN apk update \
     && apk add bash curl gettext php7 php7-fpm \
       && sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php7/php-fpm.d/www.conf \
+      && echo 'catch_workers_output = yes' >> /etc/php7/php-fpm.d/www.conf \
       && sed -i 's/^\;error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php7/php-fpm.conf \
       && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php7/php.ini \
       && ln -sf /usr/sbin/php-fpm7 /usr/sbin/php-fpm \
