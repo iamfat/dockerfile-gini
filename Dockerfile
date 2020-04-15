@@ -19,7 +19,7 @@ RUN apk update \
       && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php7/php.ini \
       && ln -sf /usr/sbin/php-fpm7 /usr/sbin/php-fpm \
       && ln -sf /usr/bin/php7 /usr/bin/php \
-    && pei session intl gd mcrypt pdo pdo_mysql pdo_sqlite curl soap \
+    && pei session intl gd mcrypt pdo pdo_mysql pdo_sqlite curl soap sockets \
       json phar openssl bcmath dom ctype iconv zip xml zlib mbstring \
       ldap gettext posix pcntl simplexml tokenizer xmlwriter fileinfo yaml \
       zmq redis friso \
