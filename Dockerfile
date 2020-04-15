@@ -31,7 +31,7 @@ RUN apt-get -q update && \
     # Install PHP modules
     apt-get install -yq php7.1-intl php7.1-gd php7.1-mysqlnd php7.1-redis \
         php7.1-sqlite php7.1-curl php7.1-zip php7.1-mbstring php7.1-ldap php7.1-yaml \
-        php7.1-zmq php7.1-mcrypt php7.1-xml && \
+        php7.1-zmq php7.1-mcrypt php7.1-xml php7.1-soap && \
     # Install NodeJS
     curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
         bash nodesource_setup.sh && \
@@ -62,4 +62,4 @@ GINI_MODULE_BASE_PATH="/data/gini-modules"
 
 ADD start /start
 WORKDIR /data/gini-modules
-ENTRYPOINT ["/start"]
+CMD ["/start"]
