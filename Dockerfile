@@ -25,7 +25,7 @@ RUN apt-get -q update && \
         apt-get update && \
         apt-get install -yq php7.1-fpm php7.1-cli && \
         sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/7.1/fpm/pool.d/www.conf && \
-        echo 'catch_workers_output = yes' >> /etc/php/7.1/fpm/pool.d/www.conf \
+        echo 'catch_workers_output = yes' >> /etc/php/7.1/fpm/pool.d/www.conf && \
         sed -i 's/^error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php/7.1/fpm/php-fpm.conf && \
         sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php/7.1/fpm/php.ini && \
     # Install PHP modules
