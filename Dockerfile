@@ -11,8 +11,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_HOME="/usr/local/share/composer"
     
 RUN apt-get -q update && \
-    # Install cURL, Bash, VIM, UNZIP
-    apt-get install -yq curl vim unzip && \
+    # Install cURL, Bash, VIM, UNZIP, jq
+    apt-get install -yq curl vim unzip jq && \
     # Install Locales
     apt-get install -yq locales gettext && \
         sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && \
