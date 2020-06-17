@@ -12,7 +12,7 @@ ADD pei /usr/local/share/pei
 ADD pei.bash /usr/local/bin/pei
 
 RUN apk update \
-    && apk add bash curl gettext php7 php7-fpm \
+    && apk add bash curl gettext jq php7 php7-fpm \
       && sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php7/php-fpm.d/www.conf \
       && echo 'catch_workers_output = yes' >> /etc/php7/php-fpm.d/www.conf \
       && sed -i 's/^\;error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php7/php-fpm.conf \
