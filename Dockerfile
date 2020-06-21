@@ -1,5 +1,5 @@
 FROM alpine:3.9
-MAINTAINER iamfat@gmail.com
+LABEL maintainer=iamfat@gmail.com
 
 ENV TERM="xterm-color" \
     MAIL_HOST="172.17.0.1" \
@@ -22,8 +22,8 @@ RUN apk update \
       && ln -sf /usr/bin/php7 /usr/bin/php \
     && pei session intl gd mcrypt pdo pdo_mysql pdo_sqlite curl soap sockets \
       json phar openssl bcmath dom ctype iconv zip xml zlib mbstring \
-      ldap gettext posix pcntl simplexml tokenizer xmlwriter fileinfo yaml \
-      zmq redis friso \
+      ldap gettext posix pcntl simplexml tokenizer xmlwriter fileinfo \
+      pecl-yaml pecl-zmq pecl-redis \
     && apk add nodejs nodejs-npm && npm install -g less less-plugin-clean-css uglify-js \
     && apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
     && apk add git \
