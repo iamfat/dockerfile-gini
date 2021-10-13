@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.14
 LABEL maintainer=iamfat@gmail.com
 
 ENV TERM="xterm-color" \
@@ -24,7 +24,7 @@ RUN apk update \
       json phar openssl bcmath dom ctype iconv zip xml zlib mbstring \
       ldap gettext posix pcntl simplexml tokenizer xmlwriter fileinfo \
       pecl-yaml pecl-zmq pecl-redis \
-    && apk add nodejs nodejs-npm && npm install -g less less-plugin-clean-css uglify-js \
+    && apk add nodejs-less nodejs-less-plugin-clean-css uglify-js \
     && apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
     && apk add git \
     && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
