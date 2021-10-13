@@ -22,7 +22,7 @@ RUN apk update \
       && ln -sf /usr/bin/php7 /usr/bin/php \
     && pei session intl gd mcrypt pdo pdo_mysql pdo_sqlite curl soap sockets \
       json phar openssl bcmath dom ctype iconv zip xml zlib mbstring \
-      ldap gettext posix pcntl simplexml tokenizer xmlwriter fileinfo \
+      ldap gettext posix pcntl simplexml tokenizer xmlreader xmlwriter fileinfo \
       pecl-yaml pecl-zmq pecl-redis \
     && apk add nodejs-less nodejs-less-plugin-clean-css uglify-js \
     && apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
