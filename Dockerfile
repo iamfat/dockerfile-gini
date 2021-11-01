@@ -35,7 +35,7 @@ RUN apt-get -q update && \
     # Install msmtp-mta
     apt-get install -yq msmtp-mta && \
     # Clean Up
-    apt-get -yq --purge autoremove software-properties-common git && \
+    apt-get -yq --purge autoremove software-properties-common && \
     apt-get -yq autoclean && apt-get -yq clean
 
 RUN apt-get install -yq git && \    
