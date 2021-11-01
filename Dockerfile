@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 LABEL maintainer=maintain@geneegroup.com
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -11,8 +11,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_HOME="/usr/local/share/composer"
     
 RUN apt-get -q update && \
-    # Install cURL, Bash, VIM, UNZIP, jq
-    apt-get install -yq curl vim unzip jq && \
     # Install Locales
     apt-get install -yq locales gettext && \
         sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && \
@@ -20,37 +18,38 @@ RUN apt-get -q update && \
         locale-gen && \
         /usr/sbin/update-locale LANG="en_US.UTF-8" LANGUAGE="en_US:en" && \
     # Install PHP
-    apt-get install -yq software-properties-common && \
-        add-apt-repository -y ppa:ondrej/php && \
-        apt-get update && \
-        apt-get install -yq php7.1-fpm php7.1-cli && \
-        sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/7.1/fpm/pool.d/www.conf && \
-        echo 'catch_workers_output = yes' >> /etc/php/7.1/fpm/pool.d/www.conf && \
-        sed -i 's/^error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php/7.1/fpm/php-fpm.conf && \
-        sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php/7.1/fpm/php.ini && \
+    apt-get install -yq php7.4-fpm php7.4-cli && \
+        sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php/7.4/fpm/pool.d/www.conf && \
+        echo 'catch_workers_output = yes' >> /etc/php/7.4/fpm/pool.d/www.conf && \
+        sed -i 's/^error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php/7.4/fpm/php-fpm.conf && \
+        sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php/7.4/fpm/php.ini && \
     # Install PHP modules
-    apt-get install -yq php7.1-intl php7.1-gd php7.1-mysqlnd php7.1-redis \
-        php7.1-sqlite php7.1-curl php7.1-zip php7.1-mbstring php7.1-ldap php7.1-yaml \
-        php7.1-zmq php7.1-mcrypt php7.1-xml php7.1-soap && \
+    apt-get install -yq php7.4-intl php7.4-gd php7.4-mysqlnd php7.4-redis \
+        php7.4-sqlite php7.4-curl php7.4-zip php7.4-mbstring php7.4-ldap php7.4-yaml \
+        php7.4-zmq php7.4-xml php7.4-soap && \
     # Install NodeJS
-    curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
-        bash nodesource_setup.sh && \
+    apt-get install -yq curl && \
+    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
         apt-get install -yq nodejs && \
         npm install -g less less-plugin-clean-css uglify-js && \
     # Install msmtp-mta
     apt-get install -yq msmtp-mta && \
+    # Clean Up
+    apt-get -yq --purge autoremove software-properties-common git && \
+    apt-get -yq autoclean && apt-get -yq clean
+
+RUN apt-get install -yq git && \    
     # Install Composer
     mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) && \
         mv composer.phar /usr/local/bin/composer && \
         echo 'export PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh && \
     # Install Gini
-    apt-get install -yq git \
-        && mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
+    mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
         && cd /usr/local/share/gini && bin/gini composer init -f \
         && /usr/local/bin/composer update --prefer-dist --no-dev \
         && mkdir -p /data/gini-modules && \
     # Clean Up
-    apt-get -yq --purge autoremove software-properties-common git && \
+    apt-get -yq --purge autoremove git && \
     apt-get -yq autoclean && apt-get -yq clean
 
 ADD msmtprc /etc/msmtprc
