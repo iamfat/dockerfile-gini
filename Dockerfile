@@ -27,7 +27,7 @@ RUN apk update \
     && apk add git \
     && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
       && mv composer.phar /usr/local/bin/composer \
-    && mkdir -p /data/gini-modules && git clone --depth 1 https://github.com/iamfat/gini.git -b 1.13.2 /usr/local/share/gini \
+    && mkdir -p /data/gini-modules && git clone --depth 1 https://github.com/iamfat/gini.git /usr/local/share/gini \
         && cd /usr/local/share/gini && bin/gini composer init -f \
         && /usr/local/bin/composer install --no-dev \
         && bin/gini cache \
