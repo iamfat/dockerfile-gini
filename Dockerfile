@@ -37,7 +37,7 @@ ADD msmtprc /etc/msmtprc
 
 EXPOSE 9000
 
-ENV PATH="/data/gini-modules/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+ENV PATH="/usr/local/share/gini/bin:/usr/local/share/composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
 GINI_MODULE_BASE_PATH="/data/gini-modules"
 
 ADD start /start
