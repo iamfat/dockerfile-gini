@@ -44,7 +44,7 @@ RUN apt-get install -yq git && \
         mv composer.phar /usr/local/bin/composer && \
         echo 'export PATH="/usr/local/share/composer/vendor/bin:$PATH"' >> /etc/profile.d/composer.sh && \
     # Install Gini
-    mkdir -p /usr/local/share && git clone https://github.com/iamfat/gini /usr/local/share/gini \
+    mkdir -p /usr/local/share && git clone --depth=1 https://github.com/iamfat/gini -b 1.13.2 /usr/local/share/gini \
         && cd /usr/local/share/gini && bin/gini composer init -f \
         && /usr/local/bin/composer update --prefer-dist --no-dev \
         && mkdir -p /data/gini-modules && \
