@@ -26,9 +26,13 @@ RUN apk update \
     && apk add nodejs-less nodejs-less-plugin-clean-css uglify-js \
     && apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
     && apk add git \
-        && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
-        && mv composer.phar /usr/local/bin/composer  \
-    && rm -rf /var/cache/apk/* # buildkit
+    && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
+      && mv composer.phar /usr/local/bin/composer \
+    && mkdir -p /data/gini-modules && git clone --depth 1 https://github.com/iamfat/gini.git /usr/local/share/gini \
+        && cd /usr/local/share/gini && bin/gini composer init -f \
+        && /usr/local/bin/composer install --no-dev \
+        && bin/gini cache \
+    && rm -rf /var/cache/apk/*
 
 ADD msmtprc /etc/msmtprc
 
