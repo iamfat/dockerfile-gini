@@ -9,29 +9,25 @@ ENV TERM="xterm-color" \
     COMPOSER_HOME="/usr/local/share/composer"
 
 RUN apk update \
-    && apk add bash curl gettext jq php8 \
-    && apk add php8-fpm php8-session php8-intl php8-gd php8-curl php8-soap php8-sockets \
-    && apk add php8-pdo php8-pdo_mysql php8-pdo_sqlite \
-    && apk add php8-json php8-phar php8-openssl php8-bcmath php8-dom php8-ctype php8-iconv php8-zip php8-zlib php8-mbstring \
-    && apk add php8-ldap php8-gettext php8-posix php8-pcntl php8-fileinfo \
-    && apk add php8-simplexml php8-tokenizer php8-xml php8-xmlreader php8-xmlwriter \
-    && apk add php8-pecl-yaml php8-pecl-redis \
-    && sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php8/php-fpm.d/www.conf \
-    && echo 'catch_workers_output = yes' >> /etc/php8/php-fpm.d/www.conf \
-    && echo 'decorate_workers_output = no' >> /etc/php8/php-fpm.d/www.conf \
-    && sed -i 's/^\;error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php8/php-fpm.conf \
-    && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php8/php.ini \
-    && ln -sf /usr/sbin/php-fpm8 /usr/sbin/php-fpm \
-    && ln -sf /usr/bin/php8 /usr/bin/php \
+    && apk add bash curl gettext jq php81 \
+    && apk add php81-fpm php81-session php81-intl php81-gd php81-curl php81-soap php81-sockets \
+    && apk add php81-pdo php81-pdo_mysql php81-pdo_sqlite \
+    && apk add php81-json php81-phar php81-openssl php81-bcmath php81-dom php81-ctype php81-iconv php81-zip php81-zlib php81-mbstring \
+    && apk add php81-ldap php81-gettext php81-posix php81-pcntl php81-fileinfo \
+    && apk add php81-simplexml php81-tokenizer php81-xml php81-xmlreader php81-xmlwriter \
+    && apk add php81-pecl-yaml php81-pecl-redis \
+    && sed -i 's/^listen\s*=.*$/listen = 0.0.0.0:9000/' /etc/php81/php-fpm.d/www.conf \
+    && echo 'catch_workers_output = yes' >> /etc/php81/php-fpm.d/www.conf \
+    && echo 'decorate_workers_output = no' >> /etc/php81/php-fpm.d/www.conf \
+    && sed -i 's/^\;error_log\s*=.*$/error_log = \/dev\/stderr/' /etc/php81/php-fpm.conf \
+    && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php81/php.ini \
+    && ln -sf /usr/sbin/php-fpm81 /usr/sbin/php-fpm \
+    && ln -sf /usr/bin/php81 /usr/bin/php \
     && apk add nodejs-less nodejs-less-plugin-clean-css uglify-js \
     && apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
     && apk add git \
     && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
-      && mv composer.phar /usr/local/bin/composer \
-    && mkdir -p /data/gini-modules && git clone --depth 1 https://github.com/iamfat/gini.git /usr/local/share/gini \
-        && cd /usr/local/share/gini && bin/gini composer init -f \
-        && /usr/local/bin/composer install --no-dev \
-        && bin/gini cache \
+    && mv composer.phar /usr/local/bin/composer  \
     && rm -rf /var/cache/apk/*
 
 ADD msmtprc /etc/msmtprc
