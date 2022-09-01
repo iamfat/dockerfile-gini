@@ -1,4 +1,4 @@
-FROM alpine:3
+FROM alpine:3.15
 LABEL maintainer=iamfat@gmail.com
 
 ENV TERM="xterm-color" \
