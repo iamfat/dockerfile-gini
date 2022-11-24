@@ -23,7 +23,7 @@ RUN apk update \
     && sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/dev\/stderr/' /etc/php81/php.ini \
     && ln -sf /usr/sbin/php-fpm81 /usr/sbin/php-fpm \
     && ln -sf /usr/bin/php81 /usr/bin/php \
-    && apk add nodejs-less nodejs-less-plugin-clean-css uglify-js \
+    && apk add npm && npm install -g less less-plugin-clean-css uglify-js \
     && apk add msmtp && ln -sf /usr/bin/msmtp /usr/sbin/sendmail \
     && apk add git \
     && mkdir -p /usr/local/bin && (curl -sL https://getcomposer.org/installer | php) \
