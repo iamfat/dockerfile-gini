@@ -5,4 +5,4 @@ set -e
 sed -i "s/{{MAIL_HOST}}/$MAIL_HOST/g" /etc/msmtprc
 sed -i "s/{{MAIL_FROM}}/$MAIL_FROM/g" /etc/msmtprc
 
-exec /usr/sbin/php-fpm8 --nodaemonize --fpm-config /etc/php8/php-fpm.conf
+exec /usr/sbin/php-fpm --nodaemonize --fpm-config /etc/php81/php-fpm.conf
